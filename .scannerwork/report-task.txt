@@ -1,0 +1,7 @@
+organization=carlogiralda
+projectKey=CarloGiralda_MyPersonal
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.26521
+dashboardUrl=https://sonarcloud.io/dashboard?id=CarloGiralda_MyPersonal
+ceTaskId=AX6_NV6dhI-HlXYDA48l
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AX6_NV6dhI-HlXYDA48l
