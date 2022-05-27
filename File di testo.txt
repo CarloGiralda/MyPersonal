@@ -1,0 +1,29 @@
+ CREATE TABLE IF NOT EXISTS `azienda`.`Correlato` (
+  `Cliente` VARCHAR(128) NOT NULL,
+  `CodiceProposta` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`Cliente`, `CodiceProposta`),
+  INDEX `fk_Cliente_idx` (`Cliente` ASC) VISIBLE,
+  INDEX `fk_PropostaCliente_idx` (`CodiceProposta` ASC) VISIBLE,
+  CONSTRAINT `fk_Client_idx`
+    FOREIGN KEY (`Cliente`)
+    REFERENCES `azienda`.`Cliente` (`CodiceFiscale`),
+  CONSTRAINT `fk_PropostaCliente`
+    FOREIGN KEY (`CodiceProposta`)
+    REFERENCES `azienda`.`PropostaCommerciale` (`CodiceAlfanumerico`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+USE `azienda`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `azienda`.`Correlato_BEFORE_INSERT`
+BEFORE INSERT ON `azienda`.`Correlato`
+FOR EACH ROW
+BEGIN
+    DECLARE temp VARCHAR(128);
+	SET temp = NEW.CodiceProposta;
+	if (select count(*) from proposte_terminate where `CodiceAlfanumerico` = temp) > 0 then
+		SET NEW.CodiceProposta = null;
+	end if;
+END$$
