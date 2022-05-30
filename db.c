@@ -279,20 +279,15 @@ role_t attempt_login(struct credentials *cred)
 void db_switch_to_login(void)
 {
 	close_prepared_stmts();
- 	/*
-	if(mysql_change_user(conn, getenv("LOGIN_USER"), getenv("LOGIN_PASS"), getenv("DB"))) {
-		fprintf(stderr, "mysql_change_user() failed: %s\n", mysql_error(conn));
-		exit(EXIT_FAILURE);
-	}
-	*/
 
     	mysql_close(conn);
     	conn = mysql_init(NULL);
-    	if(mysql_real_connect(conn, "localhost", "login", "login", "azienda",
+    	if(mysql_real_connect(conn, getenv("HOST"), getenv("LOGIN_USER"), getenv("LOGIN_PASS"), getenv("DB"),
 			      3306, NULL,
 			      CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS | CLIENT_COMPRESS | CLIENT_INTERACTIVE | CLIENT_REMEMBER_OPTIONS) == NULL) {
 		finish_with_error(conn, "mysql_real_connect() failed\n");
 	}
+
 
 	if(!initialize_prepared_stmts(LOGIN_ROLE)) {
 		fprintf(stderr, "[FATAL] Cannot initialize prepared statements.\n");
@@ -304,20 +299,15 @@ void db_switch_to_login(void)
 void db_switch_to_utente(void)
 {
 	close_prepared_stmts();
-    	/*
-	if(mysql_change_user(conn, getenv("ADMINISTRATOR_USER"), getenv("ADMINISTRATOR_PASS"), getenv("DB"))) {
-		fprintf(stderr, "mysql_change_user() failed: %s\n", mysql_error(conn));
-		exit(EXIT_FAILURE);
-	}
-	*/
 
     	mysql_close(conn);
     	conn = mysql_init(NULL);
-    	if(mysql_real_connect(conn, "localhost", "utente", "utente", "azienda",
+    	if(mysql_real_connect(conn, getenv("HOST"), getenv("FUNC_USER"), getenv("FUNC_PASS"), getenv("DB"),
 			      3306, NULL,
 			      CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS | CLIENT_COMPRESS | CLIENT_INTERACTIVE | CLIENT_REMEMBER_OPTIONS) == NULL) {
 		finish_with_error(conn, "mysql_real_connect() failed\n");
 	}
+
 
 	if(!initialize_prepared_stmts(UTENTE)) {
 		fprintf(stderr, "[FATAL] Cannot initialize prepared statements.\n");
@@ -439,16 +429,10 @@ out:
 void db_switch_to_manager(void)
 {
 	close_prepared_stmts();
-    	/*
-	if(mysql_change_user(conn, getenv("AGENCY_USER"), getenv("AGENCY_PASS"), getenv("DB"))) {
-		fprintf(stderr, "mysql_change_user() failed: %s\n", mysql_error(conn));
-		exit(EXIT_FAILURE);
-	}
-	*/
 
     	mysql_close(conn);
     	conn = mysql_init(NULL);
-    	if(mysql_real_connect(conn, "localhost", "manager", "manager", "azienda",
+    	if(mysql_real_connect(conn, getenv("HOST"), getenv("MANAGER_USER"), getenv("MANAGER_PASS"), getenv("DB"),
                   3306, NULL,
 			      CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS | CLIENT_COMPRESS | CLIENT_INTERACTIVE | CLIENT_REMEMBER_OPTIONS) == NULL) {
 		finish_with_error(conn, "mysql_real_connect() failed\n");
@@ -463,16 +447,10 @@ void db_switch_to_manager(void)
 void db_switch_to_comm(void)
 {
         close_prepared_stmts();
-        /*
-        if(mysql_change_user(conn, getenv("AGENCY_USER"), getenv("AGENCY_PASS"), getenv("DB"))) {
-                fprintf(stderr, "mysql_change_user() failed: %s\n", mysql_error(conn));
-                exit(EXIT_FAILURE);
-        }
-        */
 
         mysql_close(conn);
         conn = mysql_init(NULL);
-        if(mysql_real_connect(conn, "localhost", "commerciale", "commerciale", "azienda",
+        if(mysql_real_connect(conn, getenv("HOST"), getenv("COMMERCIALE_USER"), getenv("COMMERCIALE_PASS"), getenv("DB"),
                               3306, NULL,
                               CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS | CLIENT_COMPRESS | CLIENT_INTERACTIVE | CLIENT_REMEMBER_OPTIONS) == NULL) {
                 finish_with_error(conn, "mysql_real_connect() failed\n");
