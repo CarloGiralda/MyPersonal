@@ -55,7 +55,11 @@ void get_cons_inf(struct user *user, struct cons *cons)
 
     get_input("Insert your username: ", USERNAME_LEN, user->credentials->username, false);
 	get_input("Insert Code: ", ID_LEN, cons->cod, false);
-	get_input("Insert activation date: ", DATE_LEN, cons->day, false);
+    while(true) {
+		if(validate_date(get_input("Insert activation date [YYYY-MM-DD]: ", DATE_LEN, cons->day, false)))
+			break;
+		fprintf(stderr, "Invalid date!\n");
+	}
 }
 
 void get_cons_code(struct cons *cons)
