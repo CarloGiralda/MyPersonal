@@ -42,7 +42,7 @@ void print_user_id(struct user *user)
 	puts("** User's ID **\n");
 
     if(strcmp(user->id, "") == 0) {
-        printf("\nInvalid role. Please enter only [utente], [manager] or [commerciale]\n");
+        printf("\nInvalid role. Please enter only [funzionario], [manager] or [commerciale]\n");
         return;
     }
 	printf("\n%s\n", user->id);
@@ -53,7 +53,7 @@ void get_cons_inf(struct user *user, struct cons *cons)
 	clear_screen();
 	puts("** Get information about consultation **\n");
 
-    get_input("Insert your username: ", USERNAME_LEN, user->credentials->username, false);
+    get_input("Insert your username: ", USERNAME_LEN, user->credentials->username, false); //Esempio di come si potrebbe sostituire lo username all'identificativo per far sì che l'applicazione sia di più facile utilizzo per i dipendenti
 	get_input("Insert Code: ", ID_LEN, cons->cod, false);
     while(true) {
 		if(validate_date(get_input("Insert activation date [YYYY-MM-DD]: ", DATE_LEN, cons->day, false)))
