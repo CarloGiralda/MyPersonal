@@ -466,7 +466,11 @@ DELIMITER $$
 USE `azienda`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `invalidare_consulenza`(in cod varchar(128))
 BEGIN
-	update PropostaCommerciale set `Validità` = 'Terminata', `DataDiScadenza` = CURDATE(), `DataDiAttivazione` = NULL where `CodiceAlfanumerico` = cod;
+	if (select count(*) from Correlato where `CodiceProposta` = cod) = 0 then
+		update PropostaCommerciale set `Validità` = 'Terminata', `DataDiScadenza` = CURDATE(), `DataDiAttivazione` = NULL where `CodiceAlfanumerico` = cod;
+	else
+		signal sqlstate '45000';
+    end if;
 END$$
 
 DELIMITER ;
