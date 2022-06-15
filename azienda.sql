@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `azienda`.`Dipendente` (
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `Username_UNIQUE` (`Username` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 25
+AUTO_INCREMENT = 26
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `azienda`.`Contatto` (
     FOREIGN KEY (`FunzionarioContattante`)
     REFERENCES `azienda`.`Dipendente` (`ID`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 73
+AUTO_INCREMENT = 74
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -197,13 +197,13 @@ CREATE TABLE IF NOT EXISTS `azienda`.`Gestione` (
   `Manager` INT NOT NULL,
   `CodiceProposta` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`Manager`, `CodiceProposta`),
-  UNIQUE INDEX `CodiceProposta_UNIQUE` (`CodiceProposta` ASC) VISIBLE,
+  INDEX `fk_Gestione_1_idx` (`CodiceProposta` ASC) VISIBLE,
+  CONSTRAINT `fk_Gestione_1`
+    FOREIGN KEY (`CodiceProposta`)
+    REFERENCES `azienda`.`PropostaCommerciale` (`CodiceAlfanumerico`),
   CONSTRAINT `fk_Manager`
     FOREIGN KEY (`Manager`)
-    REFERENCES `azienda`.`Dipendente` (`ID`),
-  CONSTRAINT `fk_Proposta`
-    FOREIGN KEY (`CodiceProposta`)
-    REFERENCES `azienda`.`PropostaCommerciale` (`CodiceAlfanumerico`))
+    REFERENCES `azienda`.`Dipendente` (`ID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -640,6 +640,10 @@ DELIMITER ;
 DROP TABLE IF EXISTS `azienda`.`proposte_terminate`;
 USE `azienda`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `azienda`.`proposte_terminate` AS select `azienda`.`PropostaCommerciale`.`CodiceAlfanumerico` AS `CodiceAlfanumerico` from `azienda`.`PropostaCommerciale` where (`azienda`.`PropostaCommerciale`.`Validità` = 'Terminata');
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `azienda`;
 
 DELIMITER $$
@@ -705,7 +709,3 @@ END$$
 
 
 DELIMITER ;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
